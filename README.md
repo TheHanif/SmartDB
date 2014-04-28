@@ -9,4 +9,29 @@ SmartDB
 
 
 ##Tutorial
-Comming Soon
+
+###SETUP
+
+###INSERT
+
+###SELECT
+
+###DELETE
+
+###UPDATE
+
+###RESULT - ALL RESULTS - LOOP
+
+###ROW COUNT - Effected rows
+
+###LAST INSERT ID
+
+###SELECT COLUMNS
+
+###Using where
+
+###CUSTOM QUERY
+
+###BIND
+
+###JOIN
