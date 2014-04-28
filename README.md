@@ -35,3 +35,9 @@ SmartDB
 ###BIND
 
 ###JOIN
+
+##Licensing
+GNU GENERAL PUBLIC LICENSE v3.0 | <a href="https://www.gnu.org/copyleft/gpl.html" target="_blank">Read</a>
+
+##Help & Feedback
+Have you made something cool with SmartDB? Let me know on thehanif@mns.com
