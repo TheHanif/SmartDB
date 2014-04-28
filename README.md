@@ -36,6 +36,8 @@ SmartDB
 
 ###JOIN
 
+###_DATE
+
 ##Licensing
 GNU GENERAL PUBLIC LICENSE v3.0 | <a href="https://www.gnu.org/copyleft/gpl.html" target="_blank">Read</a>
 
