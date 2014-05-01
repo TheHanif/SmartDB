@@ -91,12 +91,36 @@ while($result = $db->result()){
 ```
 
 ###ROW COUNT - Effected rows
+- Display the total counts after GET or effect rows count after DELETE or UPDATE
+```PHP
+echo $db->row_count();
+```
 
 ###LAST INSERT ID
+- Returns the ID of the last inserted row or sequence value
+```PHP
+echo $db->last_id();
+```
 
 ###SELECT COLUMNS
+```PHP
+// SELECT id FROM dummy_table
+$columns = array();
+$columns[] = 'id';
+
+$db->select($columns);
+$num_rows = 10; // Optional
+$db->get('dummy_table', $num_rows);
+```
 
 ###Using WHERE
+- @param = column name
+- @param = value
+- @pram = condition
+```PHP
+$db->where('id', 2, '=');
+$db->get('dummy_table') or $db->delete('dummy_table');
+```
 
 ###CUSTOM QUERY
 
