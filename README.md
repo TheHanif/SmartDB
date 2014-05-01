@@ -27,6 +27,16 @@ $db = new SmartDB;
 ```
 
 ###INSERT
+```
+// Insert single row
+// Prepare columns and values
+$data = array();
+$data['column1'] = 'mix value 1';
+$data['column2'] = 'mix value 2';
+
+// Insert into dummy_table
+$db->insert('dummy_table', $data);
+```
 
 ###SELECT
 
