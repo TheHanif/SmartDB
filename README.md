@@ -22,12 +22,12 @@ define('DB_PASSWORD', 'root');			// User password of database
 
 // Including class
 require_once 'class.SmartDB.php';
-
-$db = new SmartDB;
 ```
 
 ###INSERT
 ```
+$db = new SmartDB;
+
 // Insert single row
 // Prepare columns and values
 $data = array();
