@@ -11,6 +11,19 @@ SmartDB
 ##Tutorial
 
 ###SETUP
+```
+<?php 
+// SETUP for smartDB
+define('DB_HOST', 'localhost');			// Hostname of database
+define('DB_NAME', 'sampleDB');			// Name of database
+define('DB_USER', 'root');				  // Username of database
+define('DB_PASSWORD', 'root');			// User password of database
+
+// Including class
+require_once 'class.SmartDB.php';
+
+$db = new SmartDB;
+```
 
 ###INSERT
 
