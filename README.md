@@ -39,6 +39,13 @@ $db->insert('dummy_table', $data);
 ```
 
 ###SELECT
+```PHP
+$db = new SmartDB;
+
+// SELECT * FROM dummy_table
+$num_rows = 10; // Optional
+$db->get('dummy_table', $num_rows);
+```
 
 ###DELETE
 
