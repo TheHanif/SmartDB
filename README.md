@@ -12,7 +12,7 @@ SmartDB
 
 ###SETUP
 - Add this code at top of your php applications or use a seperate file for setup
-```
+```PHP
 <?php 
 // SETUP for smartDB
 define('DB_HOST', 'localhost');			// Hostname of database
@@ -25,7 +25,7 @@ require_once 'class.SmartDB.php';
 ```
 
 ###INSERT
-```
+```PHP
 $db = new SmartDB;
 
 // Insert single row
@@ -48,10 +48,47 @@ $db->get('dummy_table', $num_rows);
 ```
 
 ###DELETE
+```PHP
+$db = new SmartDB;
+
+// SELECT FROM dummy_table limit 10
+$num_rows = 10; // Optional
+$db->delete('dummy_table', $num_rows);
+```
 
 ###UPDATE
+```PHP
+$db = new SmartDB;
+
+// update
+// Prepare columns and values
+$data = array();
+$data['column1'] = 'new mix value 1';
+$data['column2'] = 'new mix value 2';
+
+// Insert into dummy_table
+$db->update('dummy_table', $data);
+```
 
 ###RESULT - ALL RESULTS - LOOP
+- Assign single row to $result
+```PHP
+$result = $db->result();
+print_r($result);
+```
+- Assign all rows to $results
+```PHP
+$results = $db->all_results();
+print_r($results);
+```
+- Loop through row
+```PHP
+while($result = $db->result()){
+
+	print_r($result);
+	echo '<br>';
+}
+```
 
 ###ROW COUNT - Effected rows
 
