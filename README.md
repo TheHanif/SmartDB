@@ -11,12 +11,13 @@ SmartDB
 ##Tutorial
 
 ###SETUP
+- Add this code at top of your php applications or use a seperate file for setup
 ```
 <?php 
 // SETUP for smartDB
 define('DB_HOST', 'localhost');			// Hostname of database
 define('DB_NAME', 'sampleDB');			// Name of database
-define('DB_USER', 'root');				  // Username of database
+define('DB_USER', 'root');				// Username of database
 define('DB_PASSWORD', 'root');			// User password of database
 
 // Including class
@@ -41,7 +42,7 @@ $db = new SmartDB;
 
 ###SELECT COLUMNS
 
-###Using where
+###Using WHERE
 
 ###CUSTOM QUERY
 
@@ -52,7 +53,7 @@ $db = new SmartDB;
 ###_DATE
 
 ##Licensing
-GNU GENERAL PUBLIC LICENSE v3.0 | <a href="https://www.gnu.org/copyleft/gpl.html" target="_blank">Read</a>
+Free for personal use only, If you want to use this class for commercial please contact me
 
 ##Help & Feedback
 Have you made something cool with SmartDB? Let me know on thehanif@msn.com
