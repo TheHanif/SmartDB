@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @name Smart DB Class
  * @author Muhammad Hanif <thehanif@msn.com>
@@ -42,7 +43,7 @@ class Database {
      * @param  mix $value       Value to match in column
      * @return none
      */
-    public function where($column_name, $value, $operator = '='){
+    public function where($column_name, $value, $operator = '=') {
         $this->_where[$column_name] = array();
         $this->_where[$column_name][] = $value;
         $this->_where[$column_name][] = $operator;
@@ -69,13 +70,13 @@ class Database {
             where($key, $value);
         }
     }
-    
+
     /**
      * Returns the ID of the last inserted row or sequence value 
      * @param strinf $name Name of the sequence object from which the ID should be returned. 
      * @return Int
      */
-    public function last_id($name = NULL){
+    public function last_id($name = NULL) {
         return $this->_DB->lastInsertId($name);
     }
 
@@ -93,12 +94,12 @@ class Database {
         } catch (PDOException $e) {
             $er = $e->errorInfo;
             echo '<p style="font-family:arial; background:#F00; color:#FFF; padding:5px;">ERROR: ' . $er[2] . '</p>';
-        } 
+        }
     }
 
     /**
      * Bind params and data values
-     * @return none 
+     * @return none
      */
     private function bind_results() {
         if (!empty($this->_where)) {
@@ -109,7 +110,7 @@ class Database {
         if (!empty($this->_data)) {
             $i = 0;
             foreach ($this->_data as $c => $value) {
-                $this->_query->bindValue(':' . $c . $i, $value[0], $this->get_type($value[0]));
+                $this->_query->bindValue(':' . $c . $i, $value, $this->get_type($value));
                 $i++;
             }
         }
@@ -134,7 +135,7 @@ class Database {
         }
         return $param;
     }
-    
+
     /**
      * Create JOIN statment
      * @param String $table_name
@@ -145,11 +146,11 @@ class Database {
      */
     private function join($table_name, $override_name, $join_type = 'INNER JOIN', $match = array(), $select = NULL) {
         $conditions = array();
-        foreach($match as $key1 => $key2){
-            $conditions[] = $key1.'='.$key2;
+        foreach ($match as $key1 => $key2) {
+            $conditions[] = $key1 . '=' . $key2;
         }
         $this->select($select);
-        $this->_joins[]= $join_type.' '.$table_name.' AS '.$override_name.' ON '.  implode(' AND ', $conditions);
+        $this->_joins[] = $join_type . ' ' . $table_name . ' AS ' . $override_name . ' ON ' . implode(' AND ', $conditions);
     }
 
     /**
@@ -162,7 +163,7 @@ class Database {
     public function inner_join($table_name, $override_name, $match = array(), $select = NULL) {
         $this->join($table_name, $override_name, 'INNER JOIN', $match, $select);
     }
-    
+
     /**
      * Create LEFT JOIN statement
      * @param String $table_name
@@ -173,7 +174,7 @@ class Database {
     public function left_join($table_name, $override_name, $match = array(), $select = NULL) {
         $this->join($table_name, $override_name, 'LEFT JOIN', $match, $select);
     }
-    
+
     /**
      * Create RIGHT JOIN statement
      * @param String $table_name
@@ -208,8 +209,8 @@ class Database {
             $query .= ' INTO';
         }
         $query .= $this->_table;
-        
-        if(!empty($this->_joins)){
+
+        if (!empty($this->_joins)) {
             $query .= ' ';
             $query .= implode(' ', $this->_joins);
         }
@@ -221,7 +222,7 @@ class Database {
             $query .= ' WHERE ';
             $columns = array();
             foreach ($this->_where as $c => $v) {
-                $columns[] = $c . ' '. $v[1] .':' . $c;
+                $columns[] = $c . ' ' . $v[1] . ':' . $c;
             }
             $query .= implode(' AND ', $columns);
         }
@@ -254,7 +255,7 @@ class Database {
         $fields = '';
         $i = 0;
         foreach ($this->_data as $c => $v) {
-            $fields .= $c . " " .$v[1]. ":" . $c . $i . ", ";
+            $fields .= $c . " " . $v[1] . ":" . $c . $i . ", ";
             $i++;
         }
         return rtrim($fields, ', ');
@@ -326,12 +327,14 @@ class Database {
 
     /**
      * Delete row
-     * @param  String $table_name 
-     * @return none             
+     * @param String $table_name
+     * @param Int $num_rows How many rows to select
+     * @return none
      */
-    public function delete($table_name) {
+    public function delete($table_name, $num_rows = NULL) {
         $this->_action = 'DELETE';
         $this->_table = ' ' . $table_name;
+        $this->_limit = $num_rows;
         $this->build_query();
     }
 
