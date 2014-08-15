@@ -20,7 +20,7 @@
     <header>
       <div class="inner">
         <h1>Smartdb</h1>
-        <h2></h2>
+        <h2>The most complete database class ever</h2>
         <a href="https://github.com/TheHanif/SmartDB" class="button"><small>View project on</small>GitHub</a>
       </div>
     </header>
@@ -28,37 +28,172 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <h1>
+<a name="smartdb" class="anchor" href="#smartdb"><span class="octicon octicon-link"></span></a>SmartDB</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ul>
+<li>Smart Database Class that proccess most posible PDO Queries in smart way.</li>
+<li>This class provides various methods to handle query as eazy as posible.</li>
+<li>Class contains CRUD method includind various JOIN functionalities</li>
+<li>Class also provides column and fiels selection mehods</li>
+<li>You can also find biding methors for custom queries or special JOINs.</li>
+<li>A extra _date method is available for customizing dates or get current date customized.</li>
+</ul><h2>
+<a name="tutorial" class="anchor" href="#tutorial"><span class="octicon octicon-link"></span></a>Tutorial</h2>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>SETUP</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<li>Add this code at top of your php applications or use a seperate file for setup</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="o">&lt;?</span><span class="nx">php</span> 
+<span class="c1">// SETUP for smartDB</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'DB_HOST'</span><span class="p">,</span> <span class="s1">'localhost'</span><span class="p">);</span>         <span class="c1">// Hostname of database</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'DB_NAME'</span><span class="p">,</span> <span class="s1">'sampleDB'</span><span class="p">);</span>          <span class="c1">// Name of database</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'DB_USER'</span><span class="p">,</span> <span class="s1">'root'</span><span class="p">);</span>              <span class="c1">// Username of database</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'DB_PASSWORD'</span><span class="p">,</span> <span class="s1">'root'</span><span class="p">);</span>          <span class="c1">// User password of database</span>
+
+<span class="c1">// Including class</span>
+<span class="k">require_once</span> <span class="s1">'class.SmartDB.php'</span><span class="p">;</span>
+</pre></div>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="insert" class="anchor" href="#insert"><span class="octicon octicon-link"></span></a>INSERT</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<div class="highlight highlight-PHP"><pre><span class="nv">$db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SmartDB</span><span class="p">;</span>
+
+<span class="c1">// Insert single row</span>
+<span class="c1">// Prepare columns and values</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$data</span><span class="p">[</span><span class="s1">'column1'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'mix value 1'</span><span class="p">;</span>
+<span class="nv">$data</span><span class="p">[</span><span class="s1">'column2'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'mix value 2'</span><span class="p">;</span>
+
+<span class="c1">// Insert into dummy_table</span>
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">insert</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+</pre></div>
 
 <h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a name="select" class="anchor" href="#select"><span class="octicon octicon-link"></span></a>SELECT</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<div class="highlight highlight-PHP"><pre><span class="nv">$db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SmartDB</span><span class="p">;</span>
+
+<span class="c1">// SELECT * FROM dummy_table</span>
+<span class="nv">$num_rows</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// Optional</span>
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">,</span> <span class="nv">$num_rows</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="delete" class="anchor" href="#delete"><span class="octicon octicon-link"></span></a>DELETE</h3>
+
+<div class="highlight highlight-PHP"><pre><span class="nv">$db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SmartDB</span><span class="p">;</span>
+
+<span class="c1">// SELECT FROM dummy_table limit 10</span>
+<span class="nv">$num_rows</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// Optional</span>
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">delete</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">,</span> <span class="nv">$num_rows</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="update" class="anchor" href="#update"><span class="octicon octicon-link"></span></a>UPDATE</h3>
+
+<div class="highlight highlight-PHP"><pre><span class="nv">$db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SmartDB</span><span class="p">;</span>
+
+<span class="c1">// update</span>
+<span class="c1">// Prepare columns and values</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$data</span><span class="p">[</span><span class="s1">'column1'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'new mix value 1'</span><span class="p">;</span>
+<span class="nv">$data</span><span class="p">[</span><span class="s1">'column2'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'new mix value 2'</span><span class="p">;</span>
+
+<span class="c1">// Insert into dummy_table</span>
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="result---all-results---loop" class="anchor" href="#result---all-results---loop"><span class="octicon octicon-link"></span></a>RESULT - ALL RESULTS - LOOP</h3>
+
+<ul>
+<li>Assign single row to $result</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="nv">$result</span> <span class="o">=</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">result</span><span class="p">();</span>
+<span class="nb">print_r</span><span class="p">(</span><span class="nv">$result</span><span class="p">);</span>
+</pre></div>
+
+<ul>
+<li>Assign all rows to $results</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="nv">$results</span> <span class="o">=</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">all_results</span><span class="p">();</span>
+<span class="nb">print_r</span><span class="p">(</span><span class="nv">$results</span><span class="p">);</span>
+</pre></div>
+
+<ul>
+<li>Loop through row</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="k">while</span><span class="p">(</span><span class="nv">$result</span> <span class="o">=</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">result</span><span class="p">()){</span>
+
+    <span class="nb">print_r</span><span class="p">(</span><span class="nv">$result</span><span class="p">);</span>
+    <span class="k">echo</span> <span class="s1">'&lt;br&gt;'</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="row-count---effected-rows" class="anchor" href="#row-count---effected-rows"><span class="octicon octicon-link"></span></a>ROW COUNT - Effected rows</h3>
+
+<ul>
+<li>Display the total counts after GET or effect rows count after DELETE or UPDATE</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="k">echo</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">row_count</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="last-insert-id" class="anchor" href="#last-insert-id"><span class="octicon octicon-link"></span></a>LAST INSERT ID</h3>
+
+<ul>
+<li>Returns the ID of the last inserted row or sequence value</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="k">echo</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">last_id</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="select-columns" class="anchor" href="#select-columns"><span class="octicon octicon-link"></span></a>SELECT COLUMNS</h3>
+
+<div class="highlight highlight-PHP"><pre><span class="c1">// SELECT id FROM dummy_table</span>
+<span class="nv">$columns</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$columns</span><span class="p">[]</span> <span class="o">=</span> <span class="s1">'id'</span><span class="p">;</span>
+
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="nv">$columns</span><span class="p">);</span>
+<span class="nv">$num_rows</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// Optional</span>
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">,</span> <span class="nv">$num_rows</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="using-where" class="anchor" href="#using-where"><span class="octicon octicon-link"></span></a>Using WHERE</h3>
+
+<ul>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> = column name</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> = value</li>
+<li>
+<a href="https://github.com/pram" class="user-mention">@pram</a> = condition</li>
+</ul><div class="highlight highlight-PHP"><pre><span class="nv">$db</span><span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'='</span><span class="p">);</span>
+<span class="nv">$db</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">)</span> <span class="k">or</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">delete</span><span class="p">(</span><span class="s1">'dummy_table'</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="custom-query" class="anchor" href="#custom-query"><span class="octicon octicon-link"></span></a>CUSTOM QUERY</h3>
+
+<h3>
+<a name="bind" class="anchor" href="#bind"><span class="octicon octicon-link"></span></a>BIND</h3>
+
+<h3>
+<a name="join" class="anchor" href="#join"><span class="octicon octicon-link"></span></a>JOIN</h3>
+
+<h3>
+<a name="_date" class="anchor" href="#_date"><span class="octicon octicon-link"></span></a>_DATE</h3>
+
+<h2>
+<a name="licensing" class="anchor" href="#licensing"><span class="octicon octicon-link"></span></a>Licensing</h2>
+
+<p>Free for personal use only, If you want to use this class for commercial please contact me</p>
+
+<h2>
+<a name="help--feedback" class="anchor" href="#help--feedback"><span class="octicon octicon-link"></span></a>Help &amp; Feedback</h2>
+
+<p>Have you made something cool with SmartDB? Let me know on <a href="mailto:thehanif@msn.com">thehanif@msn.com</a></p>
         </section>
 
         <aside id="sidebar">
