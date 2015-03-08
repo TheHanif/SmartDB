@@ -44,7 +44,7 @@ $db = new SmartDB;
 
 // SELECT * FROM dummy_table
 $num_rows = 10; // Optional
-$db->get('dummy_table', $num_rows);
+$db->from('dummy_table', $num_rows);
 ```
 
 ###DELETE
@@ -110,7 +110,7 @@ $columns[] = 'id';
 
 $db->select($columns);
 $num_rows = 10; // Optional
-$db->get('dummy_table', $num_rows);
+$db->from('dummy_table', $num_rows);
 ```
 
 ###Using WHERE
@@ -119,7 +119,7 @@ $db->get('dummy_table', $num_rows);
 - @pram = condition
 ```PHP
 $db->where('id', 2, '=');
-$db->get('dummy_table') or $db->delete('dummy_table');
+$db->from('dummy_table') or $db->delete('dummy_table');
 ```
 
 ###CUSTOM QUERY
