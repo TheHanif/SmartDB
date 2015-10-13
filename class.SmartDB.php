@@ -15,15 +15,18 @@
  */
 class Database {
 
-    private $_DB;
-    private $_query;
-    private $_where = array();
-    private $_select = array();
-    private $_action;
-    private $_limit;
-    private $_table;
-    private $_data;
-    private $_joins = array();
+    public $_DB;
+    public $_query;
+    public $_where = array();
+    public $_select = array();
+    public $_action;
+    public $_limit;
+    public $_table;
+    public $_data = array();
+    public $_joins = array();
+    public $_group_by;
+    public $_order_by;
+    public $_force_select_all = false;
 
     /**
      * Connect Database
@@ -49,6 +52,18 @@ class Database {
         $this->_where[$column_name][] = $operator;
     }
 
+
+
+
+     function order_by($column, $sort = 'ASC'){
+        $this->_order_by = $column .' '. $sort;
+    } // end order_by
+
+
+    function group_by($column){
+        $this->_group_by = $column;
+    } // end ofgroup_by
+
     /**
      * Define columns to select
      * @param array $columns
@@ -58,6 +73,11 @@ class Database {
             $this->_select[$column] = $name;
         }
     }
+
+    public function force_select_all()
+    {
+        $this->_force_select_all = true;
+    } // end of force_select_all
 
     /**
      * Bind params, alias where()
@@ -86,14 +106,28 @@ class Database {
      * @return none        
      */
     public function query($query) {
+        //echo $query;
         try {
             $this->_query = $this->_DB->prepare(filter_var($query, FILTER_SANITIZE_STRING));
             $this->bind_results();
             $this->_query->execute();
-            unset($this->_action, $this->_where, $this->_limit, $this->_table, $this->_select, $this->_joins);
+
+            // Reset
+            $this->_where = array();
+            $this->_select = array();
+            $this->_data = array();
+            $this->_joins = array();
+            $this->_group_by = '';
+            $this->_limit = null;
+            $this->_order_by = '';
+
+
+            // $this->_query = '';
+            // unset($this->_action, $this->_where, $this->_limit, $this->_table, $this->_select, $this->_joins);
         } catch (PDOException $e) {
+            // print_f($e)
             $er = $e->errorInfo;
-            echo '<p style="font-family:arial; background:#F00; color:#FFF; padding:5px;">ERROR: ' . $er[2] . '</p>';
+            echo '<p style="font-family:arial; background:#F00; position:absolute; z-index:10000; color:#FFF; padding:5px;">ERROR: ' . $er[2] . '</p>';
         }
     }
 
@@ -101,10 +135,33 @@ class Database {
      * Bind params and data values
      * @return none
      */
-    private function bind_results() {
+    public function bind_results() {
         if (!empty($this->_where)) {
+            $ci = 0;
             foreach ($this->_where as $c => $value) {
-                $this->_query->bindValue(':' . $c, $value[0], $this->get_type($value[0]));
+                if ($value[1] == 'IN') {
+                    continue;
+                }
+                // print_f($value);
+                // $cn = $c;
+                $ci++;
+                if (strpos($c, '.')) {
+                    $c = explode('.', $c);
+                    $c = $c[1];
+                }
+
+                if (is_array($value[0])) {
+                    foreach ($value[0] as $rkey => $rvalue) {
+                        $this->_query->bindValue(':' . $c.($ci+$rkey), $rvalue, $this->get_type($rvalue));
+                    }
+                }else{
+                    $this->_query->bindValue(':' . $c.$ci, $value[0], $this->get_type($value[0]));
+                }
+
+                // $this->_query->bindValue(':' . $c.$ci, $value[0], $this->get_type($value[0]));
+                // $this->_query->bindValue(':' . $c.$ci, 1, $this->get_type(1));
+                // $this->_query->bindValue(':' . $c.($ci+1), 5, $this->get_type(5));
+
             }
         }
 
@@ -122,7 +179,7 @@ class Database {
      * @param  mix $value param or data value
      * @return PDOdataType
      */
-    private function get_type($value) {
+    public function get_type($value) {
         if (is_int($value)) {
             $param = PDO::PARAM_INT;
         } elseif (is_bool($value)) {
@@ -145,13 +202,15 @@ class Database {
      * @param array $match
      * @param array $select
      */
-    private function join($table_name, $override_name, $join_type = 'INNER JOIN', $match = array(), $select = NULL) {
-        $conditions = array();
-        foreach ($match as $key1 => $key2) {
-            $conditions[] = $key1 . '=' . $key2;
-        }
+    public function join($table_name, $override_name, $join_type = 'INNER JOIN', $match, $select = NULL) {
+        // $conditions = array();
+        // foreach ($match as $key1 => $key2) {
+        //     $conditions[] = $key1 . '=' . $key2;
+        // }
+        if(isset($select))
         $this->select($select);
-        $this->_joins[] = $join_type . ' ' . $table_name . ' AS ' . $override_name . ' ON ' . implode(' AND ', $conditions);
+        // $this->_joins[] = $join_type . ' ' . $table_name . ' AS ' . $override_name . ' ON ' . implode(' AND ', $conditions);
+        $this->_joins[] = $join_type . ' ' . $table_name . ' AS ' . $override_name . ' ON ' . $match;
     }
 
     /**
@@ -191,10 +250,16 @@ class Database {
      * Build query before execute, Using the params, datas and requested query functions
      * @return none
      */
-    private function build_query() {
+    public function build_query() {
         $query = $this->_action;
+        
         if ($this->_action == 'SELECT') {
             if (!empty($this->_select)) {
+
+                if ($this->_force_select_all == true) {
+                    $query .= ' *,';
+                }
+
                 foreach ($this->_select as $column_name => $name) {
                     $query .=' ' . $column_name . ' as ' . $name . ', ';
                 }
@@ -203,6 +268,7 @@ class Database {
             }
             $query = rtrim($query, ', ');
         }
+
         if ($this->_action != 'UPDATE' && $this->_action != 'INSERT') {
             $query .= ' FROM ';
         }
@@ -222,9 +288,26 @@ class Database {
         if (!empty($this->_where)) {
             $query .= ' WHERE ';
             $columns = array();
+
+            $ci = 0;
             foreach ($this->_where as $c => $v) {
-                $columns[] = $c . ' ' . $v[1] . ':' . $c;
-            }
+                $cn = $c;
+                $ci++;
+                if (strpos($c, '.')) {
+                    $c = explode('.', $c);
+                    $c = $c[1];
+                }
+                // $columns[] = $cn . ' ' . $v[1] . ' :' . $c.$ci;
+                // $columns[] = $cn . ' ' . $v[1] . ' :' . $c.$ci . ' and :' . $c.($ci+1);
+
+                if ($v[1] == 'BETWEEN') {
+                    $columns[] = $cn . ' ' . $v[1] . ' :' . $c.$ci . ' and :' . $c.($ci+1);
+                }elseif($v[1] == 'IN'){
+                    $columns[] = $cn . ' IN ' . $v[0];
+                }else{
+                    $columns[] = $cn . ' ' . $v[1] . ' :' . $c.$ci;
+                }
+            } // end foreach
             $query .= implode(' AND ', $columns);
         }
         if ($this->_action == 'INSERT') {
@@ -243,17 +326,26 @@ class Database {
             $query .= ')';
 
         }
+        
+        if(!empty($this->_group_by)){
+            $query .= ' GROUP BY ' . $this->_group_by;
+        }
+
+        if(!empty($this->_order_by)){
+            $query .= ' ORDER BY ' . $this->_order_by;
+        }
+
         if ($this->_action != 'INSERT' && !empty($this->_limit)) {
             $query .= ' LIMIT ' . $this->_limit;
         }
+    
         $this->query($query);
     }
-
     /**
      * Build query to update data
      * @return string query part to use in build_query
      */
-    private function build_update_data() {
+    public function build_update_data() {
         $fields = '';
         $i = 0;
 
@@ -342,6 +434,7 @@ class Database {
         $this->_table = ' ' . $table_name;
         $this->_limit = $num_rows;
         $this->build_query();
+        return $this->row_count();
     }
 
     /**
